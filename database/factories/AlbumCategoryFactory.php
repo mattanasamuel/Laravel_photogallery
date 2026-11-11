@@ -22,8 +22,8 @@ class AlbumCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'album_id' => Album::factory(),
-            'album_category_id' => AlbumCategories::factory()
+            'album_id' => Album::query()->inRandomOrder()->first()?->id ?? Album::factory()->create(),
+            'album_category_id' => AlbumCategories::query()->inRandomOrder()->first()?->id ?? AlbumCategories::factory()->create()
         ];
     }
 }

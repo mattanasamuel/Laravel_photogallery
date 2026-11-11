@@ -19,10 +19,11 @@ class PhotoFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->text(20),
             'description' => fake()->text(128),
-            'image_path' => fake()->text(),
-            'album_id' => Album::factory()
+            'image_path' => fake()->imageUrl(),
+            'album_id' => Album::query()->inRandomOrder()->first()?->id ?? Album::factory() //qualsiasi album, il primo che trova
+            //se trova un album esistente nel db ne estrae il campo id, altrimenti ne crea uno al volo
         ];
     }
 }
