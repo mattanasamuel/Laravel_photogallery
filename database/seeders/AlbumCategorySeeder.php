@@ -13,7 +13,7 @@ class AlbumCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        AlbumCategory::factory(10)->create();
+        AlbumCategory::factory()->create(); //gli utenti li creiamo agganciandoli automaticamente all
 
     }
 }

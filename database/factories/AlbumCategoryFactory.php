@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Album;
+use App\Models\AlbumCategories;
 use App\Models\AlbumCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,13 +18,12 @@ class AlbumCategoryFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    protected static array $categories = ['landscape', 'mountains', 'cats', 'dogs'];
+
     public function definition(): array
     {
         return [
-            'category_name' => fake()->randomElement(static::$categories), //prendo un valore pseudo casuale
-            'description' => fake()->text(),
-            'user_id' => User::factory() //creo l'utente al momento, così si associa all'album
+            'album_id' => Album::factory(),
+            'album_category_id' => AlbumCategories::factory()
         ];
     }
 }
