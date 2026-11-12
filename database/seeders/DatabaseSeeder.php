@@ -28,10 +28,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]); */
         //non ci serve creare l'utente perchè viene creato nel seeder dell'album category
-        User::factory(15)->create(); //creo 15 utenti
-        Album::factory()->create();
-        AlbumCategories::factory()->create();
-        AlbumCategory::factory()->create();
-        Photo::factory(100)->create();
+        User::factory()
+            ->count(20)
+            ->hasAlbumCategories()
+            //un utente ha un album che a sua volta ha foto, perciò chiamo la sua factory e a sua volta chiama il metodo magico
+            ->has(
+                Album::factory(2)->hasPhotos(10)
+            )
+            ->create();
     }
 }

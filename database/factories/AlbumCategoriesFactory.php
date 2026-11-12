@@ -22,7 +22,7 @@ class AlbumCategoriesFactory extends Factory
         return [
             'category_name' => fake()->randomElement(static::$categories),
             'description' => fake()->text(),
-            'user_id' => User::query()->inRandomOrder()->first()?->id ?? User::factory()->create()
+            'user_id' => User::factory()
         ];
     }
 }

@@ -24,7 +24,7 @@ class Album extends Model
 
     public function photos():HasMany
     {
-        return $this->hasMany(Photos::class, 'album_id', 'id');
+        return $this->hasMany(Photo::class, 'album_id', 'id');
     }
 
 }
