@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -59,7 +60,8 @@ class AlbumsController extends Controller
             $sql .= " AND album_name=:album_name";
         }
         //dd($sql);
-        return DB::select($sql, $where);
+        $albums = DB::select($sql, $where);
+        return view('albums.index', ['albums' => $albums]);
     }
     /**
      * Show the form for creating a new resource.
@@ -82,7 +84,7 @@ class AlbumsController extends Controller
      */
     public function show(Album $album)
     {
-        //
+        return $album;
     }
 
     /**
@@ -104,8 +106,9 @@ class AlbumsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Album $album)
+    public function destroy(int $album):int
     {
-        //
+        $sql = 'DELETE FROM albums WHERE id =:id';
+        return DB::delete($sql, ['id' => $album]);
     }
 }

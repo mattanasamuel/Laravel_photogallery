@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('album_category', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('album_id')->constrained();
+            $table->foreignId('album_id')->constrained()->cascadeOnDelete(); //aggiungo la cascade altrimenti la delete non riesce ad eliminare
             $table->foreignId('album_category_id')->constrained();
             $table->timestamps();
         });
