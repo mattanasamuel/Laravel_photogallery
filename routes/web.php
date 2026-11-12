@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlbumsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -16,5 +17,7 @@ Route::view('profile', 'profile')
 require __DIR__.'/auth.php';
 
 Route::get('users', function(){
-    return User::with('albums')->get();
+    return User::with('albums')->paginate(5); //suddividere in pagine il json
 });
+
+Route::get('/albums', [AlbumsController::class, 'index']);
