@@ -39,7 +39,7 @@
                         <a class="nav-link active" aria-current="page" href="{{ route('albums.index') }}">Albums</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Nuovo Album</a>
+                        <a class="nav-link" href="{{route('albums.create')}}">Nuovo Album</a>
                     </li>
                 </ul>
                 <form class="d-flex" role="search" method="GET" action="{{ route('albums.index') }}">
@@ -53,9 +53,14 @@
 
 <!-- Contenuto principale della pagina -->
 <main class="flex-shrink-0">
+
     <div class="container">
+        <p class="text-center fs-1">{{$title ?? ''}}</p>
+        <x-alert-info/> <!-- per poterlo reperire con jquery -->
         {{ $slot }}
     </div>
+
+
 </main>
 
 <footer class="footer mt-auto py-3 bg-body-tertiary">
@@ -69,6 +74,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> <!-- aggiungo jquery da CDN -->
 <script>
 
+    /*
     $(document).ready(function(){
         $('ul').on('click', 'a.btn-danger', function(evt){ //intercetto il clic su un elemento ul
             evt.preventDefault(); //prevengo il browser da seguire l'href nel tag a
@@ -91,6 +97,48 @@
                 }
             })
         })
+    }) */
+
+    $(document).ready(function(){
+        $('div.alert').fadeOut(5000) //per far scomparire l'elemento banner dopo 5 secondi
+        $('ul').on('click', 'a.btn-danger', function(evt){
+            evt.preventDefault()
+            let url = $(this).attr('href')
+            let element = url.split('/').pop() //restituisce l'ultimo elemento dell'array split
+            let li = evt.target.closest('li')
+            //li = $(this).closest('li')
+
+
+            $.ajax(url, {
+                method: 'DELETE',
+                data: {
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(resp, status){
+                    //alert('Record ' + resp.responseText + ' deleted')
+                    $('div.alert')
+                        .text('elemento ' + element + ' eliminato!')
+                        .removeClass('alert-info alert-danger')
+                        .addClass('alert-success')
+                        .show().fadeOut(5000);
+                    li.remove()
+
+                    console.log(status)
+                },
+
+                error: function(resp){
+                    $('div.alert')
+                        .text('elemento ' + resp + ' NON eliminato!')
+                        .removeClass('alert-info alert-success')
+                        .addClass('alert-danger')
+                        .show().fadeOut(5000);
+                    console.error(resp);
+                }
+            })
+
+
+        })
+
     })
 
 

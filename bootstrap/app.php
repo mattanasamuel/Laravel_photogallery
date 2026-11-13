@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //qui elimino il middleware per la verifica del token
-        $middleware->preventRequestForgery(['*']); //mantengo il middleware attivo ma escludo tutti gli url (*) dalla verifica del token
+        //$middleware->preventRequestForgery(['*']); //mantengo il middleware attivo ma escludo tutti gli url (*) dalla verifica del token
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
