@@ -21,6 +21,15 @@ Route::get('users', function(){
     return User::with('albums')->paginate(5); //suddividere in pagine il json
 });
 
+Route::get('usersnoalbum', function(){
+    $usersnoalbum = DB::table('users as u')
+        ->leftJoin('albums as a', 'u.id', '=', 'a.user_id')
+        ->select('u.id', 'u.email', 'u.name')
+        ->whereRaw('album_name IS NULL')
+        ->get();
+    return $usersnoalbum;
+});
+
 //tanto il metodo edit è già mappato dal controller resources
 /*
 Route::get('albums/{id}/edit', function($id){

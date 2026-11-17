@@ -20,7 +20,7 @@ class AlbumFactory extends Factory
     {
         return [
             'album_name' => fake()->text(128),
-            'album_thumb' => fake()->text(128),
+            'album_thumb' => fake()->imageUrl(),
             'description' => fake()->text(128),
             'user_id' =>User::query()->inRandomOrder()->first()?->id ?? User::factory()->create()
         ];

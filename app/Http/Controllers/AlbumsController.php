@@ -66,7 +66,8 @@ class AlbumsController extends Controller
         return view('albums.index', ['albums' => $albums]);
     } */
     public function index(Request $request){ //fatto con il query builder
-        $queryBuilder = DB::table('albums')->orderBy('id', 'ASC');
+        //$queryBuilder = DB::table('albums')->orderBy('id', 'ASC');
+        $queryBuilder = Album::orderBy('id', 'ASC');
         if($request->has('id'))
             $queryBuilder->where('id', '=', $request->input('id')); //get è di symphony, meglio usare input
         if($request->has('album_name'))
@@ -102,10 +103,21 @@ class AlbumsController extends Controller
         return redirect()->route('albums.index');
     } */
 
+    /*
     public function store(Request $request)
     {
         $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/';
         $res = DB::table('albums')->insert($data); //per inserire tanti record simultaneamente posso passare un array di array
+        $message = 'album ' . $data['album_name'] . ($res ? ' created' : ' not created');
+        session()->flash('message', $message);
+        session()->flash('message_code', 1);
+        return redirect()->route('albums.index');
+    } */
+
+    public function store(Request $request)
+    {
+        $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/';
+        $res = Album::insert($data); //per inserire tanti record simultaneamente posso passare un array di array
         $message = 'album ' . $data['album_name'] . ($res ? ' created' : ' not created');
         session()->flash('message', $message);
         session()->flash('message_code', 1);
@@ -123,10 +135,15 @@ class AlbumsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    /*
     public function edit(Album $album)
     {
         $album = DB::selectOne('SELECT * FROM albums WHERE id = :id', [':id' => $album->id]);
         return view('albums.edit', ['album' => $album]);
+    } */
+    public function edit(Album $album)
+    {
+        return view('albums.edit')->withAlbum($album);
     }
 
     /**
@@ -148,9 +165,28 @@ class AlbumsController extends Controller
         return redirect()->route('albums.index');
     } */
 
+    /*
     public function update(Request $request, Album $album)
     {
         $res = DB::table('albums')->whereId($album->id)->update($request->only(['album_name', 'description']));
+        $message = 'Album con id=' . $album->id . ($res ? ' aggiornato' : ' non aggiornato');
+        //carico i dati in sessione
+        session()->flash('message', $message);
+        session()->flash('message_code', (int)$res);
+        return redirect()->route('albums.index');
+    } */
+
+    public function update(Request $request, Album $album){
+        $data = $request->only(['album_name', 'description']);
+        //$album->album_name = $data['album_name'];
+        //$res = $album->save();
+        if($request->hasFile('album_thumb')){
+            $file = $request->file('album_thumb');
+            $filename = $album->id . '.' . $file->extension();
+            $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename);
+            $album->album_thumb = $thumbnail;
+        }
+        $res = $album->update($data);
         $message = 'Album con id=' . $album->id . ($res ? ' aggiornato' : ' non aggiornato');
         //carico i dati in sessione
         session()->flash('message', $message);
@@ -169,12 +205,22 @@ class AlbumsController extends Controller
         $sql = 'DELETE FROM albums WHERE id =:id';
         return DB::delete($sql, ['id' => $album]);
     } */
+    /*
     public function destroy(int $album):int
     {
         //$queryBuilder = DB::table('albums')->delete($album);
         //$queryBuilder = DB::table('albums')->where('id', '=', $album)
-        $res = DB::table('albums')->whereId($album)->delete(); //creazione col metodo magico
-        return $res;
+        //$res = DB::table('albums')->whereId($album)->delete(); //creazione col metodo magico
+        //$res = Albums::whereId($album)->delete(); //creazione col metodo magico
+        //return $res;
+        return Album::destroy($album); //posso passare 1 o un array
+        return Album::findOrFail($album)->delete();
+
+    } */
+
+    public function destroy(Album $album):int //
+    {
+        return (int)$album->delete();
 
     }
 
