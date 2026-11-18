@@ -30,6 +30,8 @@ Route::get('usersnoalbum', function(){
     return $usersnoalbum;
 });
 
+Route::get('/albums/{album}/images', [AlbumsController::class, 'getImages'])->name('albums.images');
+
 //tanto il metodo edit è già mappato dal controller resources
 /*
 Route::get('albums/{id}/edit', function($id){

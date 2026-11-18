@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Photo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,12 +69,14 @@ class AlbumsController extends Controller
     } */
     public function index(Request $request){ //fatto con il query builder
         //$queryBuilder = DB::table('albums')->orderBy('id', 'ASC');
-        $queryBuilder = Album::orderBy('id', 'ASC');
+
+        $queryBuilder = Album::orderBy('id', 'ASC')->withCount('photos');
         if($request->has('id'))
             $queryBuilder->where('id', '=', $request->input('id')); //get è di symphony, meglio usare input
         if($request->has('album_name'))
             $queryBuilder->where('album_name', 'like', '%' . $request->input('album_name') . '%'); //similitudini
         $albums = $queryBuilder->get();
+        //return $albums;
         return view('albums.index', ['albums' => $albums]);
     }
     /**
@@ -247,6 +250,10 @@ class AlbumsController extends Controller
         $filename = $album->id . '.' . $file->extension();
         $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename, ['disk' => 'public']);
         $album->album_thumb = $thumbnail;
+    }
+
+    public function getImages(Album $album){ //tipifico così da avere già l'istanza di Album
+        return Photo::whereAlbumId($album->id)->get();
     }
 
 }

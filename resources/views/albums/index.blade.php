@@ -7,7 +7,10 @@
                 ({{$album->id}}) {{$album->album_name}}
                 <div class="container">
                     <a href="/albums/{{$album->id}}" class="btn btn-success">SHOW</a>
-                    <a href="/albums/{{$album->id}}/edit" class="btn btn-warning">EDIT</a>
+                    <a href="{{route('albums.edit', $album)}}" class="btn btn-warning">EDIT</a>
+                    @if($album->photos_count > 0)
+                        <a href="{{route('albums.images', $album)}}" class="btn btn-warning">VIEW IMAGES ({{$album->photos_count}})</a>
+                    @endif
                     <a href="/albums/{{$album->id}}" class="btn btn-danger">DELETE</a>
                 </div>
                 @if($album->album_thumb)
