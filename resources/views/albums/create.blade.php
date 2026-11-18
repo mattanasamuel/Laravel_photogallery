@@ -2,7 +2,7 @@
     <x-slot:title>
         CREATE ALBUM
     </x-slot:title>
-    <form method="post" action="{{ route('albums.store') }}">
+    <form method="post" action="{{ route('albums.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="form-group px-3 my-3">
             <label for="album_name">Name</label>
@@ -12,8 +12,10 @@
             <label for="description">Description</label>
             <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
         </div>
+        @include('albums.partials.fileupload')
+
         <div class="form-group px-3 my-3">
-            <button class="btn btn-primary">UPDATE</button>
+            <button class="btn btn-primary">CREATE</button>
         </div>
     </form>
 </x-default>

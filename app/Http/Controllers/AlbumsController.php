@@ -6,6 +6,7 @@ use App\Models\Album;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumsController extends Controller
 {
@@ -80,7 +81,7 @@ class AlbumsController extends Controller
      */
     public function create()
     {
-        return view('albums.create');
+        return view('albums.create')->withAlbum(new Album());
     }
 
     /**
@@ -116,8 +117,18 @@ class AlbumsController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/';
-        $res = Album::insert($data); //per inserire tanti record simultaneamente posso passare un array di array
+        $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/' ;
+        $album = new Album();
+        $album->album_name = $data['album_name'];
+        $album->description = $data['description'];
+        $album->user_id = $data['user_id'];
+        $album->album_thumb = $data['album_thumb'];
+        $res = $album->save();
+        if($request->hasFile('album_thumb')){
+            $this->processFile($request, $album); //metadati
+            $album->save();
+        }
+
         $message = 'album ' . $data['album_name'] . ($res ? ' created' : ' not created');
         session()->flash('message', $message);
         session()->flash('message_code', 1);
@@ -181,10 +192,7 @@ class AlbumsController extends Controller
         //$album->album_name = $data['album_name'];
         //$res = $album->save();
         if($request->hasFile('album_thumb')){
-            $file = $request->file('album_thumb');
-            $filename = $album->id . '.' . $file->extension();
-            $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename);
-            $album->album_thumb = $thumbnail;
+            $this->processFile($request, $album);
         }
         $res = $album->update($data);
         $message = 'Album con id=' . $album->id . ($res ? ' aggiornato' : ' non aggiornato');
@@ -220,8 +228,25 @@ class AlbumsController extends Controller
 
     public function destroy(Album $album):int //
     {
-        return (int)$album->delete();
+        $thumbnail = $album->album_thumb;
+        $res = $album->delete();
+        if($thumbnail){
+            Storage::delete($thumbnail); //eliminazione dell'immagine dallo storage insieme all'album
+        }
+        return $res;
+    }
 
+    /**
+     * @param Request $request
+     * @param Album $album
+     * @return void
+     */
+    public function processFile(Request $request, Album $album): void
+    {
+        $file = $request->file('album_thumb');
+        $filename = $album->id . '.' . $file->extension();
+        $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename, ['disk' => 'public']);
+        $album->album_thumb = $thumbnail;
     }
 
 }
