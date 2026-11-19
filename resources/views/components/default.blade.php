@@ -7,6 +7,8 @@
 
     <!-- Bootstrap 5.3 CSS via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> <!-- aggiungo jquery da CDN -->
 
     <style>
         /* Regola estratta da sticky-footer-navbar.css per non far coprire il contenuto dalla navbar */
@@ -70,88 +72,8 @@
 </footer>
 
 <!-- Bootstrap 5.3 JS Bundle via CDN -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> <!-- aggiungo jquery da CDN -->
 <script>
-
-    /*
-    $(document).ready(function(){
-        $('ul').on('click', 'a.btn-danger', function(evt){ //intercetto il clic su un elemento ul
-            evt.preventDefault(); //prevengo il browser da seguire l'href nel tag a
-            // const urlAlbum = evt.target.getAttribute('href');
-            let btn = $(this) //salvo il riferimento al bottone, avvolgo dentro le parentesi per renderlo elemento jquery
-            const urlAlbum = btn.attr('href') //leggo l'elemento href nel bottone, this è sempre l'elemento che invoca la funzione
-            console.log(urlAlbum)
-            $.ajax(urlAlbum, {
-                method:'DELETE',
-                complete:function(resp){
-
-                    window.location.reload();
-                },
-                success:function(resp){
-                    console.log(resp.rows) //file json stringizzato della risposta pervenuta dal metodo destroy del controller
-                    alert('eliminazione riuscita')
-                },
-                error:function(resp){
-                    alert('errore eliminazione: ' . resp.rows)
-                }
-            })
-        })
-    }) */
-
-    $(document).ready(function(){
-        $('div.alert').fadeOut(5000) //per far scomparire l'elemento banner dopo 5 secondi
-        $('ul').on('click', 'a.btn-danger', function(evt){
-            evt.preventDefault()
-            let url = $(this).attr('href')
-            let element = url.split('/').pop() //restituisce l'ultimo elemento dell'array split
-            let li = evt.target.closest('li')
-            //li = $(this).closest('li')
-
-
-            $.ajax(url, {
-                method: 'DELETE',
-                data: {
-                    _token: '{{csrf_token()}}'
-                },
-                success: function(resp, status){
-                    //alert('Record ' + resp.responseText + ' deleted')
-                    $('div.alert')
-                        .text('elemento ' + element + ' eliminato!')
-                        .removeClass('alert-info alert-danger')
-                        .addClass('alert-success')
-                        .show().fadeOut(5000);
-                    li.remove()
-
-                    console.log(status)
-                },
-
-                error: function(resp){
-                    $('div.alert')
-                        .text('elemento ' + resp + ' NON eliminato!')
-                        .removeClass('alert-info alert-success')
-                        .addClass('alert-danger')
-                        .show().fadeOut(5000);
-                    console.error(resp);
-                }
-            })
-
-
-        })
-
-    })
-
-
-    /*
-    document.addEventListener('DOMContentLoaded', function(){
-        alert('dom')
-        document.querySelectorAll('li a.btn-danger').forEach(ele => {
-            ele.addEventListener('click', (evt)=>{
-                evt.preventDefault(); //impedisce di ricaricare auto
-                alert(evt.target.getAttribute('href'))
-            })
-        })
-    }) */
+    {{$script ?? ''}}
 </script>
 </body>
 </html>

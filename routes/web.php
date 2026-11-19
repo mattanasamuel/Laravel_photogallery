@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumsController;
+use App\Http\Controllers\PhotosController;
 use App\Models\Album;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -46,3 +47,4 @@ Route::get('albums/{id}/edit', function(Album $album){ //route automatica con il
 //Route::get('/albums', [AlbumsController::class, 'index']);
 
 Route::resource('albums', AlbumsController::class); //mappa le rotte in automatico
+Route::resource('photos', PhotosController::class);

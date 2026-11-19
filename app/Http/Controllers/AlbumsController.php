@@ -194,7 +194,7 @@ class AlbumsController extends Controller
         $data = $request->only(['album_name', 'description']);
         //$album->album_name = $data['album_name'];
         //$res = $album->save();
-        if($request->hasFile('album_thumb')){
+        if($request->hasFile('file_thumb')){
             $this->processFile($request, $album);
         }
         $res = $album->update($data);
@@ -246,14 +246,16 @@ class AlbumsController extends Controller
      */
     public function processFile(Request $request, Album $album): void
     {
-        $file = $request->file('album_thumb');
+        $file = $request->file('file_thumb');
         $filename = $album->id . '.' . $file->extension();
         $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename, ['disk' => 'public']);
         $album->album_thumb = $thumbnail;
+        //dd($thumbnail);
     }
 
     public function getImages(Album $album){ //tipifico così da avere già l'istanza di Album
-        return Photo::whereAlbumId($album->id)->get();
+        $images = Photo::whereAlbumId($album->id)->get();
+        return view('images.albumimages', compact('album', 'images'));
     }
 
 }

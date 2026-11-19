@@ -9,7 +9,9 @@
             <label for="album_name">Name</label>
             <input class="form-control" type="text" name="album_name" id="album_name" value="{{$album->album_name}}">
         </div>
-        @include('albums.partials.fileupload')
+
+        <x-fileupload :instance="$album" :path="$album->path"/>
+
         <div class="form-group px-3 my-3">
             <label for="description">Description</label>
             <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{$album->description}}</textarea>

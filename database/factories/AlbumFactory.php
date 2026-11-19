@@ -19,7 +19,7 @@ class AlbumFactory extends Factory
     public function definition(): array
     {
         return [
-            'album_name' => fake()->text(128),
+            'album_name' => fake()->text(15),
             'album_thumb' => fake()->imageUrl(),
             'description' => fake()->text(128),
             'user_id' =>User::query()->inRandomOrder()->first()?->id ?? User::factory()->create()
