@@ -35,6 +35,7 @@
         @endforelse
         </tbody>
     </table>
+    {{$images->links('vendor.pagination.bootstrap-5')}}
     <x-slot:script>
         $(document).ready(function(){
             $('div.alert').fadeOut(5000) //per far scomparire l'elemento banner dopo 5 secondi

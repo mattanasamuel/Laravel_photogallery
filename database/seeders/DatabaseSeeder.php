@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             ->hasAlbumCategories()
             //un utente ha un album che a sua volta ha foto, perciò chiamo la sua factory e a sua volta chiama il metodo magico
             ->has(
-                Album::factory(2)->hasPhotos(10)
+                Album::factory(2)->hasPhotos(50)
             )
             ->create();
     }
