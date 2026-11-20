@@ -41,12 +41,13 @@ class Photo extends Model
     use HasFactory;
     use SoftDeletes; //aggiungo i trait dei metodi che intendo usare
     protected $fillable = ['name', 'description', 'image_path'];
-    public function albums (): BelongsTo
+    public function album (): BelongsTo
     {
         return $this->belongsTo(Album::class, 'album_id', 'id');
     }
 
     public function getPathAttribute(){
+        if(!$this->image_path) return null;
         $url = $this->image_path;
         if(!str_starts_with($url, 'http')){
             $url = 'storage/' . $url;

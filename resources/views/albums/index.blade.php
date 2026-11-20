@@ -8,6 +8,7 @@
                 <div class="container">
                     <a href="/albums/{{$album->id}}" class="btn btn-success">SHOW</a>
                     <a href="{{route('albums.edit', $album)}}" class="btn btn-warning">EDIT</a>
+                    <a href="{{route('photos.create', ['album_id' => $album->id])}}" class="btn btn-warning">create image in {{$album->id}}</a>
                     @if($album->photos_count > 0)
                         <a href="{{route('albums.images', $album)}}" class="btn btn-warning">VIEW IMAGES ({{$album->photos_count}})</a>
                     @endif

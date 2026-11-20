@@ -65,6 +65,7 @@ class Album extends Model
     }
 
     public function getPathAttribute(){
+        if(!$this->album_thumb) return null;
         $url = $this->album_thumb;
         if(!str_starts_with($url, 'http')){
             $url = 'storage/' . $url;

@@ -2,6 +2,7 @@
     <x-slot:title>
         EDIT ALBUM "{{$album->album_name}}"
     </x-slot:title>
+    @include('components.counterrors')
     <form method="post" action="{{ route('albums.update', ['album' => $album->id]) }}" enctype="multipart/form-data">
         @csrf
         @method('PATCH')

@@ -43,6 +43,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('albums.create')}}">Nuovo Album</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('photos.create')}}">Nuova Immagine</a>
+                    </li>
                 </ul>
                 <form class="d-flex" role="search" method="GET" action="{{ route('albums.index') }}">
                     <input class="form-control me-2" type="search" name="album_name" placeholder="Cerca album..." aria-label="Search" value="{{ request('album_name') }}" />

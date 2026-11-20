@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Exception;
@@ -118,7 +119,7 @@ class AlbumsController extends Controller
         return redirect()->route('albums.index');
     } */
 
-    public function store(Request $request)
+    public function store(AlbumRequest $request)
     {
         $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/' ;
         $album = new Album();
@@ -190,11 +191,11 @@ class AlbumsController extends Controller
         return redirect()->route('albums.index');
     } */
 
-    public function update(Request $request, Album $album){
+    public function update(AlbumRequest $request, Album $album){ //album è un istanza di Album, non un integer (pk)
         $data = $request->only(['album_name', 'description']);
         //$album->album_name = $data['album_name'];
         //$res = $album->save();
-        if($request->hasFile('file_thumb')){
+        if($request->hasFile('file_path')){
             $this->processFile($request, $album);
         }
         $res = $album->update($data);
@@ -246,7 +247,8 @@ class AlbumsController extends Controller
      */
     public function processFile(Request $request, Album $album): void
     {
-        $file = $request->file('file_thumb');
+
+        $file = $request->file('file_path');
         $filename = $album->id . '.' . $file->extension();
         $thumbnail = $file->storeAs(config('filesystems.album_thumbnail_dir'), $filename, ['disk' => 'public']);
         $album->album_thumb = $thumbnail;
@@ -255,7 +257,7 @@ class AlbumsController extends Controller
 
     public function getImages(Album $album){ //tipifico così da avere già l'istanza di Album
         $imgPerPage = config('filesystems.img_per_page');
-        $images = Photo::whereAlbumId($album->id)->paginate($imgPerPage);
+        $images = Photo::whereAlbumId($album->id)->latest()->paginate($imgPerPage);
         return view('images.albumimages', compact('album', 'images'));
     }
 
