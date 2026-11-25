@@ -12,6 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        //$middleware->redirectUsersTo('/albums');
+        $middleware->redirectGuestsTo('login');
         //qui elimino il middleware per la verifica del token
         //$middleware->preventRequestForgery(['*']); //mantengo il middleware attivo ma escludo tutti gli url (*) dalla verifica del token
     })

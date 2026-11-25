@@ -37,6 +37,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    @auth
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('albums.index') }}">Albums</a>
                     </li>
@@ -46,6 +47,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('photos.create')}}">Nuova Immagine</a>
                     </li>
+                    @endauth
                 </ul>
                 <form class="d-flex" role="search" method="GET" action="{{ route('albums.index') }}">
                     <input class="form-control me-2" type="search" name="album_name" placeholder="Cerca album..." aria-label="Search" value="{{ request('album_name') }}" />
@@ -53,19 +55,46 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     @guest
-                        <li>
-                            <a href="{{route('login')}}" class="nav-link">Login</a>
-                        </li>
-                        <li>
-                            <a href="{{route('register')}}" class="nav-link">Register</a>
-                        </li>
+
+                            <li>
+                                <a href="{{route('login')}}" class="nav-link">Login</a>
+                            </li>
+                            <li>
+                                <a href="{{route('register')}}" class="nav-link">Register</a>
+                            </li>
+                        </ul>
                     @endguest
                     @auth
-                            <li>
-                                <a href="{{route('register')}}" class="nav-link">Logout</a>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                    {{Auth::user()->name}} <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="">
+                                        <a href="#" class="nav-link"
+                                           onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"
+                                        >Logout</a>
+
+
+                                        <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
+                                            {{csrf_field()}}
+                                        </form>
+                                    </li>
+                                    <li class="">
+                                        <a href="{{route('dashboard')}}" class="nav-link">dashboard</a>
+                                    </li>
+                                </ul>
+
+
                             </li>
+
+
                     @endauth
-                </ul>
+
+
+
             </div>
         </div>
     </nav>

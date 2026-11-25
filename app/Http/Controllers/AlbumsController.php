@@ -7,9 +7,11 @@ use App\Models\Album;
 use App\Models\Photo;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+//#[Middleware('auth', except: ['index', 'show'])]
 class AlbumsController extends Controller
 {
     /**

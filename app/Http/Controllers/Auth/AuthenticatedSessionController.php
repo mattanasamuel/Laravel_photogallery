@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('albums.index', absolute: false)); //gestisce il login, cambio qui la schermata da ritornare
     }
 
     /**

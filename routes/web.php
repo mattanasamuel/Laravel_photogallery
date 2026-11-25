@@ -49,5 +49,5 @@ Route::get('albums/{id}/edit', function(Album $album){ //route automatica con il
 
 //Route::get('/albums', [AlbumsController::class, 'index']);
 
-Route::resource('albums', AlbumsController::class); //mappa le rotte in automatico
+Route::resource('albums', AlbumsController::class)->middleware('auth'); //mappa le rotte in automatico, aggiunge il middleware
 Route::resource('photos', PhotosController::class);
