@@ -51,6 +51,21 @@
                     <input class="form-control me-2" type="search" name="album_name" placeholder="Cerca album..." aria-label="Search" value="{{ request('album_name') }}" />
                     <button class="btn btn-outline-success" type="submit">Cerca</button>
                 </form>
+                <ul class="nav navbar-nav navbar-right">
+                    @guest
+                        <li>
+                            <a href="{{route('login')}}" class="nav-link">Login</a>
+                        </li>
+                        <li>
+                            <a href="{{route('register')}}" class="nav-link">Register</a>
+                        </li>
+                    @endguest
+                    @auth
+                            <li>
+                                <a href="{{route('register')}}" class="nav-link">Logout</a>
+                            </li>
+                    @endauth
+                </ul>
             </div>
         </div>
     </nav>

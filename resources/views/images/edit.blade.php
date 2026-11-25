@@ -1,5 +1,4 @@
 <x-default>
-
 @if($photo->id)
     <h3>edit image "{{$photo->name}}"</h3>
     <form method="post" action="{{ route('photos.update', ['photo' => $photo->id]) }}" enctype="multipart/form-data">
@@ -35,5 +34,5 @@
             <button class="btn btn-primary">UPDATE</button>
         </div>
     </form>
-</x-default>
+</x-default> <!-- è solo perché ho aperto due form, nonostante siano negli if blade -->
 
