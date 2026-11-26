@@ -13,7 +13,8 @@
             <label for="description">Description</label>
             <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{old('description')}}</textarea>
         </div>
-        @include('albums.partials.fileupload')
+
+        <x-fileupload :instance="$album" :path="$album->album_thumb"/>
 
         <div class="form-group px-3 my-3">
             <button class="btn btn-primary">CREATE</button>

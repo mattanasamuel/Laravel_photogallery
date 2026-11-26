@@ -17,6 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('albums', AlbumsController::class)->withoutMiddlewareFor(['index', 'show'], 'auth');//->middleware('auth'); //mappa le rotte in automatico, aggiunge il middleware
+    Route::resource('photos', PhotosController::class);
+
 });
 
 require __DIR__.'/auth.php';
@@ -49,5 +52,4 @@ Route::get('albums/{id}/edit', function(Album $album){ //route automatica con il
 
 //Route::get('/albums', [AlbumsController::class, 'index']);
 
-Route::resource('albums', AlbumsController::class)->middleware('auth'); //mappa le rotte in automatico, aggiunge il middleware
-Route::resource('photos', PhotosController::class);
+

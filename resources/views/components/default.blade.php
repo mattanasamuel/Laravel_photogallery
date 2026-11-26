@@ -86,15 +86,8 @@
                                         <a href="{{route('dashboard')}}" class="nav-link">dashboard</a>
                                     </li>
                                 </ul>
-
-
                             </li>
-
-
                     @endauth
-
-
-
             </div>
         </div>
     </nav>

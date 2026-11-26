@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class AlbumRequest extends FormRequest
@@ -11,8 +12,12 @@ class AlbumRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): bool //this è la richiesta http in ingresso
     {
+        $album = $this->route('album');
+
+        if($album)
+            return $album->user_id === Auth::id();
         return true;
     }
 
@@ -23,7 +28,7 @@ class AlbumRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('album');
+        $id = $this->route('album'); //il route model binding mi restituisce l'oggetto album dal db preso l'id nel parametro album dell'uri
         //dd($id);
         $res = [
             'album_name' => ['required'], //su create deve essere univoco su albums, su update deve essere // ma senza contare il record corrente, deve essere valorizzato come array per poter fare append, sulle stringhe non si può fare
@@ -35,7 +40,7 @@ class AlbumRequest extends FormRequest
             $res['album_name'][] = Rule::unique('albums')->ignore($id);
         } else {
             //caso create
-            $res['album_thumb'] = 'required|image';
+            $res['file_path'] = 'required|image';
             $res['album_name'][] = Rule::unique('albums'); //fa append sull'array esistente
         }
         return $res;

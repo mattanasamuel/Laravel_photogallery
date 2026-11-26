@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Photo;
+use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
+
+
     protected $rules = [
         'album_id' => 'required|integer|exists:albums,id',
         'name' => 'required',

@@ -7,13 +7,16 @@ use App\Models\Album;
 use App\Models\Photo;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 //#[Middleware('auth', except: ['index', 'show'])]
 class AlbumsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -74,6 +77,7 @@ class AlbumsController extends Controller
         //$queryBuilder = DB::table('albums')->orderBy('id', 'ASC');
 
         $queryBuilder = Album::orderBy('id', 'ASC')->withCount('photos');
+        $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id'))
             $queryBuilder->where('id', '=', $request->input('id')); //get è di symphony, meglio usare input
         if($request->has('album_name'))
@@ -87,6 +91,7 @@ class AlbumsController extends Controller
      */
     public function create()
     {
+        //dd(ini_get('xdebug.mode'), ini_get('xdebug.start_with_request'), ini_get('xdebug.client_host'), php_ini_scanned_files());
         return view('albums.create')->withAlbum(new Album());
     }
 
@@ -123,14 +128,14 @@ class AlbumsController extends Controller
 
     public function store(AlbumRequest $request)
     {
-        $data = $request->only(['album_name', 'description']); $data['user_id'] = 1; $data['album_thumb'] = '/' ;
+        $data = $request->only(['album_name', 'description']); $data['user_id'] = Auth::user()->id; $data['album_thumb'] = '/' ;
         $album = new Album();
         $album->album_name = $data['album_name'];
         $album->description = $data['description'];
         $album->user_id = $data['user_id'];
         $album->album_thumb = $data['album_thumb'];
         $res = $album->save();
-        if($request->hasFile('album_thumb')){
+        if($request->hasFile('file_path')){
             $this->processFile($request, $album); //metadati
             $album->save();
         }
@@ -146,7 +151,9 @@ class AlbumsController extends Controller
      */
     public function show(Album $album)
     {
-        return $album;
+        if($album->user_id === Auth::user()->id)
+            return $album;
+        //abort(401);
     }
 
     /**
@@ -231,7 +238,7 @@ class AlbumsController extends Controller
         return Album::findOrFail($album)->delete();
 
     } */
-
+    #TODO destroy adattandola alla modifica del partial e utilizzo del component universale fileupload
     public function destroy(Album $album):int //
     {
         $thumbnail = $album->album_thumb;
