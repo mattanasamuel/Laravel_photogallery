@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
 use App\Models\Photo;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 //#[Middleware('auth', except: ['index', 'show'])]
 class AlbumsController extends Controller
 {
+    public function __construct(){
+        $this->authorizeResource(Album::class);
+    }
 
     /**
      * Display a listing of the resource.
@@ -91,6 +96,7 @@ class AlbumsController extends Controller
      */
     public function create()
     {
+
         //dd(ini_get('xdebug.mode'), ini_get('xdebug.start_with_request'), ini_get('xdebug.client_host'), php_ini_scanned_files());
         return view('albums.create')->withAlbum(new Album());
     }
@@ -151,9 +157,12 @@ class AlbumsController extends Controller
      */
     public function show(Album $album)
     {
+        /*
         if($album->user_id === Auth::user()->id)
             return $album;
-        //abort(401);
+        abort(401); */
+        //Gate::authorize('view', $album);
+        return $album;
     }
 
     /**
@@ -167,7 +176,21 @@ class AlbumsController extends Controller
     } */
     public function edit(Album $album)
     {
+        //dd($album->user);
+
+        //Gate::authorize('update', $album);
+        /*
+        if(Gate::denies('manage-album', $album)) //user viene passato automaticamente
+            abort(401);
+        */
+        /*
+        if($album->user_id != Auth::id())
+            abort(401);
+        else
+            return view('albums.edit')->withAlbum($album);
+        */
         return view('albums.edit')->withAlbum($album);
+
     }
 
     /**
@@ -201,6 +224,10 @@ class AlbumsController extends Controller
     } */
 
     public function update(AlbumRequest $request, Album $album){ //album è un istanza di Album, non un integer (pk)
+        /*
+        if(Gate::denies('manage-album', $album)) //user viene passato automaticamente
+            abort(401); */
+        //Gate::authorize('update', $album);
         $data = $request->only(['album_name', 'description']);
         //$album->album_name = $data['album_name'];
         //$res = $album->save();
@@ -238,9 +265,9 @@ class AlbumsController extends Controller
         return Album::findOrFail($album)->delete();
 
     } */
-    #TODO destroy adattandola alla modifica del partial e utilizzo del component universale fileupload
     public function destroy(Album $album):int //
     {
+        //Gate::authorize('delete', $album);
         $thumbnail = $album->album_thumb;
         $res = $album->delete();
         if($thumbnail){

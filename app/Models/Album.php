@@ -54,7 +54,7 @@ class Album extends Model
         return $this->belongsToMany(AlbumCategory::class, 'album_category', 'album_id', 'album_category_id'); //le relazione many to many devono essere dichiarate manualmente?
     }
 
-    public function users():BelongsTo
+    public function user():BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
