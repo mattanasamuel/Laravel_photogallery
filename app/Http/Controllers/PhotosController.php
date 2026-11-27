@@ -8,11 +8,15 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
+    public function __construct(){
+        $this->authorizeResource(Photo::class);
+    }
 
 
     protected $rules = [
@@ -128,7 +132,7 @@ class PhotosController extends Controller
      */
     public function processFile(Request $request, Photo $photo): void
     {
-        dd($request);
+
         $file = $request->file('file_path');
         $name = preg_replace('@[a-z]i@', '_', $photo->name);
         $filename =  $name . '.' . $file->extension();
@@ -144,6 +148,6 @@ class PhotosController extends Controller
      */
     public function getAlbums(): Collection
     {
-        return Album::orderBy('album_name')->select(['id', 'album_name'])->get();
+        return Album::whereUserId(Auth::id())->orderBy('album_name')->select(['id', 'album_name'])->get();
     }
 }

@@ -16,11 +16,11 @@ class AlbumCategoriesFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    protected static array $categories = ['landscape', 'mountains', 'cats', 'dogs'];
+    public static array $categories = ['landscape', 'mountains', 'cats', 'dogs', 'nightlife', 'cars', 'whatsapp', 'screenshots', 'birds'];
     public function definition(): array
     {
         return [
-            'category_name' => fake()->randomElement(static::$categories),
+            'category_name' => collect($this::$categories)->shuffle()->take(1),
             'description' => fake()->text(),
             'user_id' => User::factory()
         ];

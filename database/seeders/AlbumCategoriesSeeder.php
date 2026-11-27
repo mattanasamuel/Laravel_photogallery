@@ -6,7 +6,7 @@ use App\Models\AlbumCategories;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AlbumCategoriesSeeder extends Seeder
+class AlbumCategoriesSeeder extends Seeder //categorie disponibili
 {
     /**
      * Run the database seeds.

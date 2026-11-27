@@ -17,25 +17,12 @@ class AlbumRequest extends FormRequest
     public function authorize(): bool //this è la richiesta http in ingresso
     {
         /*
-        $album = $this->route('album');
-
-        if($album)
-            return $album->user_id === Auth::id();
-        return true;
-        */
-        $album = $this->route()->album; //finalmente funziona il route model binding
-
+        $album = $this->route()->album;
         if(!$album){
            Gate::authorize('create', Album::class); //devo comunque passare la classe
         }
         else
             Gate::authorize('update', $album);
-
-        /* questo utilizzando i gates
-        if(Gate::denies('manage-album', $album)) //user viene passato automaticamente
-            return false;
-        else
-            return true;
         */
         return true;
     }

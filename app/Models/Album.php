@@ -49,9 +49,10 @@ class Album extends Model
     //protected $primaryKey = 'id';
     protected $fillable = ['album_name', 'description', 'user_id', 'album_thumb'];
     protected $guarded = ['id'];
+    #TODO scriversi come cazzo funzionano i metodi eloquent nei model per le tabelle pivot
     public function categories (): BelongsToMany
     {
-        return $this->belongsToMany(AlbumCategory::class, 'album_category', 'album_id', 'album_category_id'); //le relazione many to many devono essere dichiarate manualmente?
+        return $this->belongsToMany(AlbumCategories::class, 'album_category', 'album_id', 'album_category_id'); //le relazione many to many devono essere dichiarate manualmente?
     }
 
     public function user():BelongsTo

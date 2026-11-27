@@ -33,8 +33,9 @@ class AlbumCategories extends Model
 {
     /** @use HasFactory<\Database\Factories\AlbumCategoriesFactory> */
     use HasFactory;
+    #TODO scriversi come cazzo funzionano i metodi eloquent nei model per le tabelle pivot
     public function albums (): BelongsToMany
     {
-        return $this->belongsToMany(AlbumCategory::class, 'album_category', 'album_category_id', 'album_id'); //la related pivot key indica la foreign key dell'altra tabella al di là della pivot
+        return $this->belongsToMany(Album::class, 'album_category', 'album_category_id', 'album_id'); //la related pivot key indica la foreign key dell'altra tabella al di là della pivot
     }
 }

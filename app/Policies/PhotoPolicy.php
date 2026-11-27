@@ -11,9 +11,9 @@ class PhotoPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): bool //posso accedere al metodo index? lista di foto
     {
-        return false;
+        return true; #TODO capire perché non cambia un cazzo :/
     }
 
     /**
@@ -21,7 +21,7 @@ class PhotoPolicy
      */
     public function view(User $user, Photo $photo): bool
     {
-        return false;
+        return $photo->album->user_id === $user->id; //confronto via magic method
     }
 
     /**
@@ -29,7 +29,7 @@ class PhotoPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class PhotoPolicy
      */
     public function update(User $user, Photo $photo): bool
     {
-        return false;
+        return $photo->album->user_id === $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class PhotoPolicy
      */
     public function delete(User $user, Photo $photo): bool
     {
-        return false;
+        return $photo->album->user_id === $user->id;
     }
 
     /**
@@ -53,7 +53,7 @@ class PhotoPolicy
      */
     public function restore(User $user, Photo $photo): bool
     {
-        return false;
+        return $photo->album->user_id === $user->id;
     }
 
     /**
@@ -61,6 +61,6 @@ class PhotoPolicy
      */
     public function forceDelete(User $user, Photo $photo): bool
     {
-        return false;
+        return $photo->album->user_id === $user->id;
     }
 }

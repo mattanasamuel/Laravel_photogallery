@@ -81,7 +81,7 @@ class AlbumsController extends Controller
     public function index(Request $request){ //fatto con il query builder
         //$queryBuilder = DB::table('albums')->orderBy('id', 'ASC');
 
-        $queryBuilder = Album::orderBy('id', 'ASC')->withCount('photos');
+        $queryBuilder = Album::orderBy('id', 'ASC')->withCount('photos'); //album->photos_count
         $queryBuilder->where('user_id', Auth::user()->id);
         if($request->has('id'))
             $queryBuilder->where('id', '=', $request->input('id')); //get è di symphony, meglio usare input

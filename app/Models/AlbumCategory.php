@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @property int $id
@@ -31,6 +32,7 @@ class AlbumCategory extends Model
     use HasFactory;
     protected $table = 'album_category'; //questo model deve leggere e scrivere esclusivamente nella tabella category, ignora la convenzione con i nomi plurali per le pivot
 
+    #TODO scriversi come cazzo funzionano i metodi eloquent nei model per le tabelle pivot
     public function album()
     {
         return $this->belongsTo(Album::class, 'album_id'); //la singola entità album appartiene alla colonna album_id della pivot che punta a un elemento della classe Album

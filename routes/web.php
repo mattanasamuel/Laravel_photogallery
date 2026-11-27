@@ -1,25 +1,33 @@
 <?php
 
 use App\Http\Controllers\AlbumsController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Album;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'homepage');
+Route::view('/', 'public.albums', ['albums' => Album::get()]);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    $albums = Album::withCount('photos')->where('user_id', Auth::id())->get();
+    return view('albums.index', ['albums' => $albums]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->prefix('dashboard')->group(function () { //posso passare la policy legata alla classe #TODO capirci qualcosa
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('albums', AlbumsController::class)->withoutMiddlewareFor(['index', 'show'], 'auth');//->middleware('auth'); //mappa le rotte in automatico, aggiunge il middleware
     Route::resource('photos', PhotosController::class);
+});
 
+Route::prefix('public')->group(function () {
+    Route::get('albums', [GalleryController::class, 'index']);
+    Route::get('albums/{album}/images', [GalleryController::class, 'showAlbumImages'])
+    ->name('gallery.album.images');
 });
 
 require __DIR__.'/auth.php';
